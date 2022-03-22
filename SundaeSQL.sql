@@ -11,7 +11,7 @@ from cte c
 inner join actor a
 on c.actor_id=a.actor_id
 order by total_films desc
-limit 100
+limit 100;
 
 
 
@@ -24,7 +24,7 @@ inner join category c
 on fc.category_id=c.category_id
 where name != 'Sports' and name !='Games'
 group by name
-order by COUNT(distinct f.film_id) desc
+order by COUNT(distinct f.film_id) desc;
 
 --3.For Store 1 plot total # of rentals, revenue, # of cust for last 12 weeks
   with recursive cte as (
@@ -45,7 +45,7 @@ left join payment p
 	on p.rental_id=r.rental_id
 group by date_part('week',cte.calendar_date)
 order by date_part('week',cte.calendar_date) desc
-limit 12
+limit 12;
 
 
 
@@ -92,7 +92,7 @@ having count(r.customer_id)>1)
 select count(cte.customer_id) as US_active_users
 from  cte
 inner join cte2
-on cte.customer_id=cte2.customer_id
+on cte.customer_id=cte2.customer_id;
 
 
 --5. For Aug 2020, plot rolling average rental rates for prior 7 days.
@@ -115,7 +115,7 @@ group by date_part('day',rental_ts) )
 select date_part('day',calendar_date) as day,avg(coalesce(total,0)) OVER (ORDER BY date_part('day',calendar_date) ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) as seven_day_avg 
 from cte
 left join cte2
-on date_part('day',calendar_date)=day
+on date_part('day',calendar_date)=day;
 
 
 --This query interprets rental rate as the rental_rate field in film table
@@ -140,4 +140,4 @@ group by date_part('day',rental_ts) )
 select date_part('day',calendar_date) as day,avg(coalesce(daily_avg,0)) OVER (ORDER BY date_part('day',calendar_date) ROWS BETWEEN 6 PRECEDING AND CURRENT ROW) as seven_day_avg 
 from cte
 left join cte2
-on date_part('day',calendar_date)=day
+on date_part('day',calendar_date)=day;
